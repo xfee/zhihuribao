@@ -1,28 +1,41 @@
 <template>
+  
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <img src="./assets/logo.png"> -->
+    <!-- <img :src="logo"> -->
+    <ul>
+      <li v-for="(item, index) of stories" :key="index">
+        {{item.title}}
+        <img :src="item.images[0]">
+        </li>
+
+    </ul>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
+  data(){
+    return {
+      stories:[],
+      // logo:require('./assets/logo.png')
+    }
+  },
+  created() {
+    
+    // this.logo = require('./assets/logo.png');
+
+    //   var api = 'https://news-at.zhihu.com/api/4/news/latest'
+    this.axios.get('news/latest').then(response=> {
+      var stories = response.data.stories;
+      for (const key in stories) {
+        // window.console.log(stories)
+        stories[key]['images'][0].replace(/pic3/g, "pic1")
+        window.console.log(stories[key]['images'][0])
+      }
+      this.stories = stories
+    })
+  },
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
